@@ -58,7 +58,6 @@ namespace StockPicker.Engine
                     maxCode + "," +
                     dataService.stockDatas[maxCode].name + "," +
                     candidates[maxCode].figureBounceScore + "," +
-                    candidates[maxCode].figureRevertScore + "," + 
                     candidates[maxCode].dropRate + "," + 
                     candidates[maxCode].volumeScore + "," +
                     candidates[maxCode].maScore + "," +

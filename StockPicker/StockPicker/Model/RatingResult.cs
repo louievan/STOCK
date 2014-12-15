@@ -9,7 +9,6 @@ namespace StockPicker.Model
     public class RatingResult
     {
         public double figureBounceScore;
-        public double figureRevertScore;
         public double maScore;
         public double volumeScore;
 
@@ -21,7 +20,6 @@ namespace StockPicker.Model
         public RatingResult()
         {
             figureBounceScore = 0;
-            figureRevertScore = 0;
             maScore = 0;
             volumeScore = 0;
         }

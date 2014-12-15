@@ -137,15 +137,6 @@ namespace StockPicker.Service
             double volumeScore = (double)volumeAfter / (double)volumeBefore;
             result.volumeScore = volumeScore;
 
-            if (stockData.dailyData[0].isRaise() && stockData.dailyData[0].low < stockData.dailyData[1].low && stockData.dailyData[0].close > stockData.dailyData[1].close)
-            {
-                result.figureRevertScore = ((stockData.dailyData[1].low / stockData.dailyData[0].low) * (stockData.dailyData[0].close / stockData.dailyData[1].close) - 1) * 100;
-            }
-            else
-            {
-                result.figureRevertScore = 0;
-            }
-
             return result;
         }
     }
