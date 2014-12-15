@@ -16,3 +16,9 @@ C:\workspace\StockPicker\StockPicker\obj\Debug\StockPicker.pdb
 C:\workspace\StockPicker\StockPicker\bin\Debug\StockPicker.exe
 C:\workspace\StockPicker\StockPicker\bin\Debug\StockPicker.pdb
 C:\workspace\StockPicker\StockPicker\obj\Debug\StockPicker.csprojResolveAssemblyReference.cache
+D:\workspace\STOCK\StockPicker\StockPicker\bin\Debug\StockPicker.exe.config
+D:\workspace\STOCK\StockPicker\StockPicker\obj\Debug\StockPicker.exe
+D:\workspace\STOCK\StockPicker\StockPicker\obj\Debug\StockPicker.pdb
+D:\workspace\STOCK\StockPicker\StockPicker\bin\Debug\StockPicker.exe
+D:\workspace\STOCK\StockPicker\StockPicker\bin\Debug\StockPicker.pdb
+D:\workspace\STOCK\StockPicker\StockPicker\obj\Debug\StockPicker.csprojResolveAssemblyReference.cache

@@ -83,26 +83,28 @@ namespace StockPicker.Service
                     continue;
                 }
 
-                fail = false;
-                for (int i = 1; i <= maxDate; i++)
-                {
-                    if (stockData.dailyData[i].low < stockData.dailyData[0].low)
-                    {
-                        fail = true;
-                        break;
-                    }
-                }
-                if (fail)
-                {
-                    continue;
-                }
-
                 double raise = max - stockData.dailyData[searchDepth].low;
                 double drop = max - stockData.dailyData[0].low;
                 double dropRate = drop / raise;
                 if (dropRate > 0.45 && dropRate < 0.55)
                 {
-                    double score = raise / stockData.dailyData[searchDepth].low / searchDepth * 1000;
+
+                    fail = false;
+                    for (int i = 1; i <= maxDate; i++)
+                    {
+                        double tempDropRate = (max - stockData.dailyData[i].low) / raise;
+                        if (tempDropRate > 0.55)
+                        {
+                            fail = true;
+                            break;
+                        }
+                    }
+                    if (fail)
+                    {
+                        continue;
+                    }
+
+                    double score = raise / stockData.dailyData[searchDepth].low / (searchDepth - maxDate) * 1000;
                     if (score > highScore)
                     {
                         highScore = score;
