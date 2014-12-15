@@ -39,7 +39,7 @@ namespace StockPicker.Engine
             string filePath = CommonUtils.generateReportFilePath();
             Stream fStream = new FileStream(filePath, FileMode.Create, FileAccess.ReadWrite);
             StreamWriter sWriter = new StreamWriter(fStream, Encoding.Default);
-
+            sWriter.WriteLine("股票代码,股票名称,回撤比例,起涨日期,形态得分,成交量得分,均线得分");
             int totalCandidates = candidates.Count;
             for (int i = 1; i <= totalCandidates; i++)
             {
@@ -53,15 +53,17 @@ namespace StockPicker.Engine
                         maxCode = code;
                     }
                 }
-                Console.WriteLine(i + "." + maxCode + dataService.stockDatas[maxCode].name + " " + candidates[maxCode].getTotalScore());
-                sWriter.WriteLine(
-                    maxCode + "," +
+                string line = maxCode + "," +
                     dataService.stockDatas[maxCode].name + "," +
+                    candidates[maxCode].dropRate * 100 + "%," +
+                    candidates[maxCode].startDate + "," +
                     candidates[maxCode].figureBounceScore + "," +
-                    candidates[maxCode].dropRate + "," + 
                     candidates[maxCode].volumeScore + "," +
                     candidates[maxCode].maScore + "," +
-                    candidates[maxCode].startDate);
+                    candidates[maxCode].getTotalScore();
+
+                Console.WriteLine(i + "." + line);
+                sWriter.WriteLine(line);
 
                 candidates.Remove(maxCode);
             }
