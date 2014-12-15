@@ -16,7 +16,7 @@ namespace StockPicker.Engine
         DataService dataService;
 
         private const string HEADER = "股票代码,股票名称,最深回撤,起涨日期,形态得分,成交量得分,均线得分,总得分";
-        private const string TEMPLATE = "{0},{1},{2},{3},{4},{5},{6}";
+        private const string TEMPLATE = "{0},{1},{2},{3},{4},{5},{6},{7}";
 
         public PickingEngine(RatingService ratingService, DataService dataService)
         {

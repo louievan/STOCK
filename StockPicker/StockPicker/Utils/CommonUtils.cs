@@ -30,10 +30,12 @@ namespace StockPicker.Utils
             Encoding encoding = Encoding.Default;
 
             MailAddress from = new MailAddress("louievan@163.com", "louievan", encoding);
-            MailAddress to = new MailAddress("124458864@qq.com", "L", encoding);
+            MailAddress toMe = new MailAddress("124458864@qq.com", "L", encoding);
+            MailAddress toZk = new MailAddress("869474108@qq.com", "Zk", encoding);
 
             mail.From = from;
-            mail.To.Add(to);
+            mail.To.Add(toMe);
+            mail.To.Add(toZk);
             mail.Subject = "Daily Report " + DateTime.Now.ToShortDateString().Replace('/', '-');
             mail.IsBodyHtml = false;
             mail.Body = "";
