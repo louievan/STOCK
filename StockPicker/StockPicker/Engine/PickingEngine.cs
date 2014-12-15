@@ -15,6 +15,9 @@ namespace StockPicker.Engine
         RatingService ratingService;
         DataService dataService;
 
+        private const string HEADER = "股票代码,股票名称,最深回撤,起涨日期,形态得分,成交量得分,均线得分,总得分";
+        private const string TEMPLATE = "{0},{1},{2},{3},{4},{5},{6}";
+
         public PickingEngine(RatingService ratingService, DataService dataService)
         {
             this.ratingService = ratingService;
@@ -39,7 +42,8 @@ namespace StockPicker.Engine
             string filePath = CommonUtils.generateReportFilePath();
             Stream fStream = new FileStream(filePath, FileMode.Create, FileAccess.ReadWrite);
             StreamWriter sWriter = new StreamWriter(fStream, Encoding.Default);
-            sWriter.WriteLine("股票代码,股票名称,回撤比例,起涨日期,形态得分,成交量得分,均线得分");
+            sWriter.WriteLine(HEADER);
+
             int totalCandidates = candidates.Count;
             for (int i = 1; i <= totalCandidates; i++)
             {
@@ -53,14 +57,16 @@ namespace StockPicker.Engine
                         maxCode = code;
                     }
                 }
-                string line = maxCode + "," +
-                    dataService.stockDatas[maxCode].name + "," +
-                    candidates[maxCode].dropRate * 100 + "%," +
-                    candidates[maxCode].startDate + "," +
-                    candidates[maxCode].figureBounceScore + "," +
-                    candidates[maxCode].volumeScore + "," +
-                    candidates[maxCode].maScore + "," +
-                    candidates[maxCode].getTotalScore();
+                string line = string.Format(TEMPLATE, 
+                    maxCode,
+                    dataService.stockDatas[maxCode].name,
+                    string.Format("{0:N2}%", candidates[maxCode].dropRate * 100),
+                    candidates[maxCode].startDate,
+                    string.Format("{0:N2}", candidates[maxCode].figureBounceScore),
+                    string.Format("{0:N2}", candidates[maxCode].volumeScore),
+                    string.Format("{0:N2}", candidates[maxCode].maScore),
+                    string.Format("{0:N2}", candidates[maxCode].getTotalScore())
+                );
 
                 Console.WriteLine(i + "." + line);
                 sWriter.WriteLine(line);
