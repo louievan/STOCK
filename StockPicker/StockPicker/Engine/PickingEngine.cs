@@ -77,7 +77,7 @@ namespace StockPicker.Engine
             sWriter.Close();
             fStream.Close(); 
 
-            CommonUtils.sendMail();
+            //CommonUtils.sendMail();
         }
 
     }
