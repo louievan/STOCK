@@ -33,7 +33,7 @@ namespace StockPicker.Service
             {
                 string name = stockDatas[code].name;
                 Console.WriteLine(++processed + "/" + total + " Processing " + code + " " + name);
-                if (!validateStockHistory(code))
+                if (!loadStockHistory(code))
                 {
                     if (downloadStockHistory(code))
                     {
@@ -46,7 +46,7 @@ namespace StockPicker.Service
                 }
                 else
                 {
-                    Console.WriteLine("Skipped.");
+                    Console.WriteLine("Loaded.");
                 }
             }
             Console.WriteLine("Total: " + total);
@@ -58,7 +58,7 @@ namespace StockPicker.Service
         public DataService(string code)
         {
             downloadAllStockForToday();
-            if (!validateStockHistory(code))
+            if (!loadStockHistory(code))
             {
                 downloadStockHistory(code);
             }
@@ -154,16 +154,12 @@ namespace StockPicker.Service
             }
 
             Console.WriteLine("Download success.");
-            string filePath = CommonUtils.generateStockFilePath(code);
-            Stream fStream = new FileStream(filePath, FileMode.Create, FileAccess.ReadWrite);
-            XmlSerializer xmlFormat = new XmlSerializer(typeof(StockData), new Type[] { typeof(StockData), typeof(StockDailyData) });
-            xmlFormat.Serialize(fStream, stockData);
-            fStream.Close();
+            saveToFile(code);
 
             return true;
         }
 
-        private bool validateStockHistory(string code)
+        private bool loadStockHistory(string code)
         {
             string filePath = CommonUtils.generateStockFilePath(code);
             if (!File.Exists(filePath))
@@ -189,9 +185,24 @@ namespace StockPicker.Service
 
             if (stockData.dailyData[0].date.Equals(getLastWorkDay()))
             {
+                stockData.dailyData[0] = stockDatas[code].dailyData[0];
                 stockDatas[code] = stockData;
+
+                saveToFile(code);
                 return true;
             }
+
+            else if (stockData.dailyData[0].date.Equals(getLast2WorkDay()))
+            {
+                foreach (StockDailyData stockDailyData in stockData.dailyData)
+                {
+                    stockDatas[code].addDailyData(stockDailyData);
+                }
+
+                saveToFile(code);
+                return true;
+            }
+
             else
             {
                 return false;
@@ -210,6 +221,29 @@ namespace StockPicker.Service
                 today = today.AddDays(-2);
             }
             return today;
+        }
+
+        private DateTime getLast2WorkDay()
+        {
+            DateTime yesterday = DateTime.Today.AddDays(-1);
+            if (yesterday.DayOfWeek == DayOfWeek.Saturday)
+            {
+                yesterday = yesterday.AddDays(-1);
+            }
+            else if (yesterday.DayOfWeek == DayOfWeek.Sunday)
+            {
+                yesterday = yesterday.AddDays(-2);
+            }
+            return yesterday;
+        }
+
+        private void saveToFile(string code)
+        {
+            string filePath = CommonUtils.generateStockFilePath(code);
+            Stream fStream = new FileStream(filePath, FileMode.Create, FileAccess.ReadWrite);
+            XmlSerializer xmlFormat = new XmlSerializer(typeof(StockData), new Type[] { typeof(StockData), typeof(StockDailyData) });
+            xmlFormat.Serialize(fStream, stockDatas[code]);
+            fStream.Close();
         }
     }
 }
