@@ -17,6 +17,11 @@ namespace StockPicker.Model
         public double losingPoint;
         public double dropRate;
 
+        public double startPoint;
+        public double highPoint;
+        public double retrievePoint;
+        public double currentPoint;
+
         public RatingResult()
         {
             figureBounceScore = 0;

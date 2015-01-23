@@ -64,7 +64,7 @@ namespace StockPicker.Service
             }
         }
 
-        private void downloadAllStockForToday()
+        public void downloadAllStockForToday()
         {
             string response = null;
             WebClient webClient = new WebClient();
@@ -91,16 +91,21 @@ namespace StockPicker.Service
                 double high = double.Parse(match.Groups[5].Value);
                 double low = double.Parse(match.Groups[6].Value);
                 long volume = (long)double.Parse(match.Groups[7].Value);
-                Console.WriteLine(code+name+" |open "+open+" |close "+close+" |high "+high+" |low "+low+" |vol "+volume);
 
-                StockData stockData = new StockData(code, name);
                 StockDailyData stockDailyData = new StockDailyData(today, open, close, high, low, volume);
-
-                stockData.addDailyData(stockDailyData);
-                stockDatas.Add(code, stockData);
+                if (stockDatas.ContainsKey(code))
+                {
+                    stockDatas[code].dailyData[0] = stockDailyData;
+                }
+                else
+                {
+                    StockData stockData = new StockData(code, name);
+                    stockData.addDailyData(stockDailyData);
+                    stockDatas.Add(code, stockData);
+                }
             }
 
-            Console.WriteLine(today.Date + " Total Stock Number : " + matchCollection.Count);
+            //Console.WriteLine(today.Date + " Total Stock Number : " + matchCollection.Count);
 
         }
 

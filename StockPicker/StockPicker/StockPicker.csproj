@@ -41,8 +41,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Engine\PickingEngine.cs" />
+    <Compile Include="Engine\RecommendingEngine.cs" />
+    <Compile Include="Service\PickingService.cs" />
     <Compile Include="Model\RatingResult.cs" />
+    <Compile Include="Model\Recommendation.cs" />
     <Compile Include="Model\StockDailyData.cs" />
     <Compile Include="Model\StockData.cs" />
     <Compile Include="Program.cs" />

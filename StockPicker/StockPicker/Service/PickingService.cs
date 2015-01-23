@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace StockPicker.Engine
 {
-    class PickingEngine
+    class PickingService
     {
         RatingService ratingService;
         DataService dataService;
@@ -18,15 +18,18 @@ namespace StockPicker.Engine
         private const string HEADER = "股票代码,股票名称,最深回撤,起涨日期,形态得分,成交量得分,均线得分,总得分";
         private const string TEMPLATE = "{0},{1},{2},{3},{4},{5},{6},{7}";
 
-        public PickingEngine(RatingService ratingService, DataService dataService)
+        public PickingService(RatingService ratingService, DataService dataService)
         {
             this.ratingService = ratingService;
             this.dataService = dataService;
         }
 
-        public void PickStock()
+        public List<Recommendation> PickStock(int number)
         {
+            dataService.downloadAllStockForToday();
+
             Dictionary<string, RatingResult> candidates = new Dictionary<string, RatingResult>();
+            List<Recommendation> recommendations = new List<Recommendation>();
 
             foreach (string code in dataService.stockDatas.Keys)
             {
@@ -39,13 +42,13 @@ namespace StockPicker.Engine
                 }
             }
 
-            string filePath = CommonUtils.generateReportFilePath();
-            Stream fStream = new FileStream(filePath, FileMode.Create, FileAccess.ReadWrite);
-            StreamWriter sWriter = new StreamWriter(fStream, Encoding.Default);
-            sWriter.WriteLine(HEADER);
-
             int totalCandidates = candidates.Count;
-            for (int i = 1; i <= totalCandidates; i++)
+            if (number > totalCandidates)
+            {
+                number = totalCandidates;
+            }
+
+            for (int i = 1; i <= number; i++)
             {
                 double max = 0;
                 string maxCode = null;
@@ -57,26 +60,14 @@ namespace StockPicker.Engine
                         maxCode = code;
                     }
                 }
-                string line = string.Format(TEMPLATE, 
-                    maxCode,
-                    dataService.stockDatas[maxCode].name,
-                    string.Format("{0:N2}%", candidates[maxCode].dropRate * 100),
-                    candidates[maxCode].startDate,
-                    string.Format("{0:N2}", candidates[maxCode].figureBounceScore),
-                    string.Format("{0:N2}", candidates[maxCode].volumeScore),
-                    string.Format("{0:N2}", candidates[maxCode].maScore),
-                    string.Format("{0:N2}", candidates[maxCode].getTotalScore())
-                );
 
-                Console.WriteLine(i + "." + line);
-                sWriter.WriteLine(line);
+                Recommendation recommendation = new Recommendation(maxCode, dataService.stockDatas[maxCode].name, candidates[maxCode]);
+                recommendations.Add(recommendation);
 
                 candidates.Remove(maxCode);
             }
 
-            sWriter.Close();
-            fStream.Close(); 
-
+            return recommendations;
             //CommonUtils.sendMail();
         }
 

@@ -13,6 +13,10 @@ namespace StockPicker.Service
         static int MIN_SEARCH_DEPTH = 7;
         static int MIN_MAX_DEPTH = 2;
 
+        static double DROP_RATE_UPPER_BOUND = 0.55;
+        static double DROP_RATE_LOWER_BOUND = 0.45;
+
+
 
         public RatingResult rate(StockData stockData)
         {
@@ -86,14 +90,14 @@ namespace StockPicker.Service
                 double raise = max - stockData.dailyData[searchDepth].low;
                 double drop = max - stockData.dailyData[0].low;
                 double dropRate = drop / raise;
-                if (dropRate > 0.45 && dropRate < 0.55)
+                if (dropRate > DROP_RATE_LOWER_BOUND && dropRate < DROP_RATE_UPPER_BOUND)
                 {
 
                     fail = false;
                     for (int i = 1; i <= maxDate; i++)
                     {
                         double tempDropRate = (max - stockData.dailyData[i].low) / raise;
-                        if (tempDropRate > 0.55)
+                        if (tempDropRate > DROP_RATE_UPPER_BOUND)
                         {
                             fail = true;
                             break;

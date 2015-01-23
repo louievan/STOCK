@@ -31,11 +31,11 @@ namespace StockPicker.Utils
 
             MailAddress from = new MailAddress("louievan@163.com", "louievan", encoding);
             MailAddress toMe = new MailAddress("124458864@qq.com", "L", encoding);
-            MailAddress toZk = new MailAddress("869474108@qq.com", "Zk", encoding);
+            //MailAddress toZk = new MailAddress("869474108@qq.com", "Zk", encoding);
 
             mail.From = from;
             mail.To.Add(toMe);
-            mail.To.Add(toZk);
+            //mail.To.Add(toZk);
             mail.Subject = "Daily Report " + DateTime.Now.ToShortDateString().Replace('/', '-');
             mail.IsBodyHtml = false;
             mail.Body = "";

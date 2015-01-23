@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using StockPicker.Model;
 using StockPicker.Service;
 using StockPicker.Engine;
+using StockPicker.Utils;
 
 namespace StockPicker
 {
@@ -19,8 +20,13 @@ namespace StockPicker
 
             //ratingService.rate(dataService.stockDatas["601222"]);
 
-            PickingEngine pickingEngine = new PickingEngine(ratingService, dataService);
-            pickingEngine.PickStock();
+            PickingService pickingService = new PickingService(ratingService, dataService);
+            RecommendingEngine recommendingEngine = new RecommendingEngine(pickingService);
+
+            //recommendingEngine.monitor(10);
+            recommendingEngine.recommend(50);
+
+            CommonUtils.sendMail();
         }
     }
 }
